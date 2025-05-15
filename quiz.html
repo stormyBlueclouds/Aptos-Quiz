@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz Selector</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .quiz-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .quiz-buttons button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #4f46e5;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .quiz-buttons button:hover {
+      background-color: #3730a3;
+    }
+
+    .question-block {
+      margin-bottom: 20px;
+    }
+
+    .question-block p {
+      font-weight: bold;
+    }
+
+    .question-block button {
+      display: block;
+      margin: 5px 0;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      background: #eee;
+      cursor: pointer;
+      width: fit-content;
+    }
+
+    #quiz-container {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Select a Quiz</h1>
+
+  <button id="login-btn">Sign in with Google</button>
+  <p id="user-info"></p>
+
+  <div class="quiz-buttons">
+    <button data-quiz="pop">Pop Culture</button>
+    <button data-quiz="sports">Sports</button>
+    <button data-quiz="history">U.S. History</button>
+    <button data-quiz="geo">Geography</button>
+    <button data-quiz="random">Random Facts</button>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <script type="module" src="quiz-app.js"></script>
+</body>
+</html>

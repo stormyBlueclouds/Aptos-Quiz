@@ -43,9 +43,81 @@ document.getElementById("login-btn").addEventListener("click", async () => {
   }
 });
 
-const quizzes = {
-  pop: [
-    {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz Selector</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .quiz-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .quiz-buttons button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #4f46e5;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .quiz-buttons button:hover {
+      background-color: #3730a3;
+    }
+
+    .question-block {
+      margin-bottom: 20px;
+    }
+
+    .question-block p {
+      font-weight: bold;
+    }
+
+    .question-block button {
+      display: block;
+      margin: 5px 0;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      background: #eee;
+      cursor: pointer;
+      width: fit-content;
+    }
+
+    #quiz-container {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Select a Quiz</h1>
+
+  <div class="quiz-buttons">
+    <button data-quiz="pop">Pop Culture</button>
+    <button data-quiz="sports">Sports</button>
+    <button data-quiz="history">U.S. History</button>
+    <button data-quiz="geo">Geography</button>
+    <button data-quiz="random">Random Facts</button>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <script>
+    // Your quizzes object
+    const quizzes = {
+      pop: [
+        {
       q: "Who played the character of Eleven in Stranger Things?",
       options: ["Millie Bobby Brown", "Sadie Sink", "Natalia Dyer"],
       answer: "Millie Bobby Brown"
@@ -80,9 +152,9 @@ const quizzes = {
       options: ["Middle-earth", "Valyria", "Westeros"],
       answer: "Westeros"
     }
-  ],
-  sports: [
-    {
+      ],
+      sports: [ 
+        {
       q: "How many players are on the field per team in soccer?",
       options: ["9", "11", "13"],
       answer: "11"
@@ -117,9 +189,9 @@ const quizzes = {
       options: ["Swimming", "Track and Field", "Gymnastics"],
       answer: "Gymnastics"
     }
-  ],
-  history: [
-    {
+      ],
+      history: [ 
+        {
       q: "Who was the 16th President of the United States?",
       options: ["Abraham Lincoln", "Andrew Jackson", "Thomas Jefferson"],
       answer: "Abraham Lincoln"
@@ -154,9 +226,9 @@ const quizzes = {
       options: ["Alaska", "The Oregon Trail", "The Louisiana Territory"],
       answer: "The Louisiana Territory"
     }
-  ],
-  geo: [
-    {
+       ],
+      geo: [
+        {
       q: "What is the longest river in the world?",
       options: ["Amazon River", "Mississippi River", "Nile River"],
       answer: "Nile River"
@@ -186,9 +258,9 @@ const quizzes = {
       options: ["Atlantic Ocean", "Pacific Ocean", "Indian Ocean"],
       answer: "Atlantic Ocean"
     }
-  ],
-  random: [
-    {
+      ],
+      random: [
+      {
       q: "What is the chemical symbol for gold?",
       options: ["Au", "Ag", "Go"],
       answer: "Au"
@@ -222,39 +294,41 @@ const quizzes = {
       q: "What is the freezing point of water in Fahrenheit?",
       options: ["100°F", "0°F", "32°F"],
       answer: "32°F"
-    }
-  ]
-};
+    }];
 
-document.addEventListener("DOMContentLoaded", () => {
-  const quizContainer = document.getElementById("quiz-container");
+    // Place your full quizzes here (copy-paste what you sent)
+    // For brevity, I won't re-paste it here
 
-  document.querySelectorAll("button[data-quiz]").forEach(button => {
-    button.addEventListener("click", () => {
-      const quizKey = button.dataset.quiz;
-      const questions = quizzes[quizKey];
+    // Load the quiz on button click
+    document.querySelectorAll("button[data-quiz]").forEach(button => {
+      button.addEventListener("click", () => {
+        const quizKey = button.dataset.quiz;
+        const questions = quizzes[quizKey];
+        const quizContainer = document.getElementById("quiz-container");
 
-      if (!questions) {
-        quizContainer.innerHTML = "<p>Quiz not found.</p>";
-        return;
-      }
+        if (!questions) {
+          quizContainer.innerHTML = "<p>Quiz not found.</p>";
+          return;
+        }
 
-      // Clear previous quiz
-      quizContainer.innerHTML = `<h2>${button.textContent} Quiz</h2>`;
+        // Render quiz
+        quizContainer.innerHTML = `<h2>${button.textContent} Quiz</h2>`;
+        questions.forEach((item, index) => {
+          const block = document.createElement("div");
+          block.className = "question-block";
 
-      questions.forEach((item, index) => {
-        const block = document.createElement("div");
-        block.className = "question-block";
+          block.innerHTML = `
+            <p>Q${index + 1}: ${item.q}</p>
+            ${item.options.map(opt =>
+              `<button onclick="alert('${opt === item.answer ? 'Correct!' : 'Wrong!'}')">${opt}</button>`
+            ).join("")}
+          `;
 
-        block.innerHTML = `
-          <p>Q${index + 1}: ${item.q}</p>
-          ${item.options.map(opt =>
-            `<button onclick="alert('${opt === item.answer ? 'Correct!' : 'Wrong!'}')">${opt}</button>`
-          ).join("")}
-        `;
-
-        quizContainer.appendChild(block);
+          quizContainer.appendChild(block);
+        });
       });
     });
-  });
-});
+  </script>
+
+</body>
+</html>
