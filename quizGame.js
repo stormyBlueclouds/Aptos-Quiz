@@ -1,3 +1,48 @@
+
+// Firebase + Google Auth setup
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBIFP5Wnq0CnWCHtut56xUDukI1p7OgFpQ",
+  authDomain: "quizdapp-276e0.firebaseapp.com",
+  projectId: "quizdapp-276e0",
+  storageBucket: "quizdapp-276e0.firebasestorage.app",
+  messagingSenderId: "779190281268",
+  appId: "1:779190281268:web:53757e5e727af581a91661",
+  measurementId: "G-46FXFBWZYD"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const provider = new GoogleAuthProvider(); //not sure if I should add this because original firebase config didn't come with it
+
+document.getElementById("login-btn").addEventListener("click", async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    const idToken = await user.getIdToken();
+
+    document.getElementById("user-info").innerText = `Logged in as ${user.email}`;
+
+    console.log("Google ID Token:", idToken);
+
+    const aptosClient = new aptos.AptosClient("https://fullnode.testnet.aptoslabs.com/v1");
+
+    // Simulate keyless registration placeholder
+    console.log("Ready to register keyless account using ID token...");
+
+  } catch (err) {
+    console.error("Login failed:", err);
+  }
+});
+
 const quizzes = {
   pop: [
     {
@@ -12,7 +57,7 @@ const quizzes = {
     },
     {
       q: "What movie won Best Picture at the 2023 Oscars?",
-      options: ["Everything Everywhere All At Once", " Top Gun: Maverick", "The Banshees of Inisherin"],
+      options: ["Everything Everywhere All At Once", "Top Gun: Maverick", "The Banshees of Inisherin"],
       answer: "Everything Everywhere All At Once"
     },
     {
@@ -35,7 +80,6 @@ const quizzes = {
       options: ["Middle-earth", "Valyria", "Westeros"],
       answer: "Westeros"
     }
-
   ],
   sports: [
     {
@@ -56,7 +100,7 @@ const quizzes = {
     {
       q: "What is the maximum score in a single frame of bowling?",
       options: ["30", "20", "15"],
-      answer: "15"
+      answer: "30"
     },
     {
       q: "What sport uses the term “love” for a score of zero?",
@@ -72,8 +116,7 @@ const quizzes = {
       q: "Simone Biles is known for her success in what sport?",
       options: ["Swimming", "Track and Field", "Gymnastics"],
       answer: "Gymnastics"
-    },
-
+    }
   ],
   history: [
     {
@@ -83,12 +126,12 @@ const quizzes = {
     },
     {
       q: "What year did the United States declare independence?",
-      options: ["1789 ", "1776", "1789"],
+      options: ["1789", "1776", "1789"],
       answer: "1776"
     },
     {
       q: "What war was fought between the North and South in the U.S.?",
-      options: [" Revolutionary War", "Civil War", "War of 1812"],
+      options: ["Revolutionary War", "Civil War", "War of 1812"],
       answer: "Civil War"
     },
     {
@@ -111,8 +154,7 @@ const quizzes = {
       options: ["Alaska", "The Oregon Trail", "The Louisiana Territory"],
       answer: "The Louisiana Territory"
     }
-
-  ]
+  ],
   geo: [
     {
       q: "What is the longest river in the world?",
@@ -126,11 +168,6 @@ const quizzes = {
     },
     {
       q: "What is the capital of Canada?",
-      options: ["Amazon River", "Mississippi River", "Nile River"],
-      answer: "Nile River"
-    },
-    {
-      q: "Which country has the most people?",
       options: ["Toronto", "Vancouver", "Ottawa"],
       answer: "Ottawa"
     },
@@ -148,8 +185,7 @@ const quizzes = {
       q: "What ocean is on the East Coast of the U.S.?",
       options: ["Atlantic Ocean", "Pacific Ocean", "Indian Ocean"],
       answer: "Atlantic Ocean"
-    },
-    
+    }
   ],
   random: [
     {
@@ -190,65 +226,35 @@ const quizzes = {
   ]
 };
 
-let currentQuiz = [];
-let currentIndex = 0;
-let score = 0;
+document.addEventListener("DOMContentLoaded", () => {
+  const quizContainer = document.getElementById("quiz-container");
 
-const questionEl = document.getElementById("question");
-const optionsEl = document.getElementById("options");
-const quizBox = document.getElementById("quiz-box");
-const resultBox = document.getElementById("result");
-const scoreText = document.getElementById("score-text");
+  document.querySelectorAll("button[data-quiz]").forEach(button => {
+    button.addEventListener("click", () => {
+      const quizKey = button.dataset.quiz;
+      const questions = quizzes[quizKey];
 
-document.getElementById("next-btn").addEventListener("click", nextQuestion);
+      if (!questions) {
+        quizContainer.innerHTML = "<p>Quiz not found.</p>";
+        return;
+      }
 
-function startQuiz(topic) {
-  currentQuiz = quizzes[topic];
-  currentIndex = 0;
-  score = 0;
+      // Clear previous quiz
+      quizContainer.innerHTML = `<h2>${button.textContent} Quiz</h2>`;
 
-  document.getElementById("quiz-selector").classList.add("hidden");
-  quizBox.classList.remove("hidden");
+      questions.forEach((item, index) => {
+        const block = document.createElement("div");
+        block.className = "question-block";
 
-  showQuestion();
-}
+        block.innerHTML = `
+          <p>Q${index + 1}: ${item.q}</p>
+          ${item.options.map(opt =>
+            `<button onclick="alert('${opt === item.answer ? 'Correct!' : 'Wrong!'}')">${opt}</button>`
+          ).join("")}
+        `;
 
-function showQuestion() {
-  const q = currentQuiz[currentIndex];
-  questionEl.textContent = `Q${currentIndex + 1}: ${q.q}`;
-  optionsEl.innerHTML = "";
-
-  q.options.forEach((opt, idx) => {
-    const btn = document.createElement("button");
-    btn.textContent = opt;
-    btn.onclick = () => checkAnswer(idx);
-    optionsEl.appendChild(btn);
+        quizContainer.appendChild(block);
+      });
+    });
   });
-}
-
-function checkAnswer(selected) {
-  const correct = currentQuiz[currentIndex].answer;
-  if (selected === correct) score++;
-
-  Array.from(optionsEl.children).forEach((btn, idx) => {
-    btn.disabled = true;
-    if (idx === correct) btn.style.backgroundColor = "lightgreen";
-    else if (idx === selected) btn.style.backgroundColor = "salmon";
-  });
-}
-
-function nextQuestion() {
-  currentIndex++;
-  if (currentIndex < currentQuiz.length) {
-    showQuestion();
-  } else {
-    quizBox.classList.add("hidden");
-    resultBox.classList.remove("hidden");
-    scoreText.textContent = `You scored ${score} out of ${currentQuiz.length}!`;
-  }
-}
-
-function restart() {
-  resultBox.classList.add("hidden");
-  document.getElementById("quiz-selector").classList.remove("hidden");
-}
+});

@@ -42,5 +42,5 @@ module 0xYourAddress::auth_platform {
         let registry = borrow_global<UserRegistry>(registry_addr);
         table::borrow(&registry.users, user_addr)
     }
-
+    
 }
