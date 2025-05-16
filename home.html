@@ -71,7 +71,7 @@
                 <button onclick ="location.href='homw.html'">Home</button>
                 <button onclick ="location.href='login.html'">Login</button>
                 <button onclick ="location.href='about.html'">About</button>
-                <button onclick ="location.href='quiz.html'">Quizzes</button>
+                <button onclick ="location.href='quizgame.html'">Quizzes</button>
             </ul>
         </nav>
     </header>
@@ -85,9 +85,17 @@
     </main>
 
     <footer>
-        <p>&copy; Aptos Based</p>
-    </footer>
-    <div id="quiz-container"></div>
-    <script src="quizzes.js"></script>
+    <p>&copy; Aptos Based</p>
+    </footer>
+    <div id="quiz-container"></div>
+    <!-- <script src="quiz.js"></script> -->
+
+    <!-- Load the Aptos SDK -->
+    <script src="https://unpkg.com/aptos@latest/dist/aptos.min.js"></script>
+
+    <!-- Your JS file (where you use aptos.AptosClient) -->
+    <script src="quizGame.js" type="module"></script>
+
+
 </body>
 </html>
