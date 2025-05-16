@@ -1,12 +1,7 @@
-// module MyAddress::MyContract {
-//     public entry fun hello(): u64 {
-//         42
-//     }
-// }
-module 0xfb91e039273777f65b0102bc64405746076c50d8e240090f6cc03601df102172::quiz_coin{
+module 0x671e0845b5e273d28da8b16a84571cf7107001b3fdf759e80845a1d264da23a2::quiz_coin{
     struct QuizCoin has store, copy, drop {}
 
-    public entry fun init_module(sender: &signer){
+    fun init_module(sender: &signer){
         aptos_framework::managed_coin::initialize<QuizCoin>(sender,b"Quiz Coin",b"QZCN",3,false,);
     }
 
@@ -14,4 +9,3 @@ module 0xfb91e039273777f65b0102bc64405746076c50d8e240090f6cc03601df102172::quiz_
     // const alice: Account = Account.generate();
     // const transaction = await aptos.transferCoinTransaction({sender: alice, recipient: bob.accountAddress, amount: 100,});
 }
-

@@ -1,11 +1,10 @@
 [package]
 name = "backend_code"
 version = "1.0.0"
-authors = []
+authors = ["Osayamen and Osaruese"]
 
 [addresses]
-
-[dev-addresses]
+auth_platform = "0x671e0845b5e273d28da8b16a84571cf7107001b3fdf759e80845a1d264da23a2"
 
 [dependencies.AptosFramework]
 git = "https://github.com/aptos-labs/aptos-framework.git"

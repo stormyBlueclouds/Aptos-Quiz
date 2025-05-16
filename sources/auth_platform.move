@@ -1,4 +1,4 @@
-module 0xYourAddress::auth_platform {
+module auth_platform::auth_platform {
 
     use std::signer;
     use std::string;
@@ -23,9 +23,9 @@ module 0xYourAddress::auth_platform {
     }
 
     /// Register a new user with a username
-    public entry fun register_user(account: &signer, username: string::String) {
-        let registry = borrow_global_mut<UserRegistry>(signer::address_of(account));
-        let addr = signer::address_of(account);
+    public entry fun register_user(admin: &signer, user: &signer, username: string::String) acquires UserRegistry {
+        let registry = borrow_global_mut<UserRegistry>(signer::address_of(admin));
+        let addr = signer::address_of(user);
 
         // Create user struct
         let user = User {
@@ -38,9 +38,13 @@ module 0xYourAddress::auth_platform {
     }
 
     /// Get a user by address (used off-chain or via view function)
-    public fun get_user(registry_addr: address, user_addr: address): &User {
+    public fun get_user(registry_addr: address, user_addr: address): User acquires UserRegistry {
         let registry = borrow_global<UserRegistry>(registry_addr);
-        table::borrow(&registry.users, user_addr)
+        *table::borrow(&registry.users, user_addr)
     }
-    
+
+    /// Get the username of a User struct
+    public fun get_username(user: &User): string::String {
+        user.username
+    }
 }
